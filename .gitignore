@@ -1,0 +1,34 @@
+
+# Python
+*.pyc
+__pycache__/
+*.egg-info/
+.env
+.venv/
+venv/
+
+# Redis
+dump.rdb
+
+# Docker
+.dockerignore
+Dockerfile.publisher
+Dockerfile.subscriber
+docker-compose.yml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE specific files
+.idea/
+*.swp
+*.swo
+*.vscode/
+
+# Other
+*.sqlite
+*.sqlite3
