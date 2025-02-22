@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy the application code
 COPY publisher_app.py /app/
 COPY subscriber.py /app/
-
+COPY . .
 # Copy requirements.txt (if you have one)
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt

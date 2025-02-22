@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Publisher and Subscriber</title>
+</head>
+<body>
+    <h1>Publisher and Subscriber</h1>
+    <!-- <h2>Subscriber Output:</h2> -->
+    <ul id="subscriberOutput">
+        </ul>
+    <h2>Publish Event:</h2>
+    <form id="eventForm">
+        <label for="type">Event Type:</label>
+        <input type="text" id="type" name="type" required><br><br>
+
+        <label for="data">Event Data (JSON):</label><br>
+        <textarea id="data" name="data" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="submit">Publish Event</button>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('subscriber_output', function(msg) {
+            console.log("Received subscriber_output:", msg.data);
+            const outputList = document.getElementById('subscriberOutput');
+            const newListItem = document.createElement('li');
+            newListItem.textContent = msg.data;
+            outputList.appendChild(newListItem);
+        });
+
+        const form = document.getElementById('eventForm');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const type = document.getElementById('type').value;
+            const data = document.getElementById('data').value;
+
+            try {
+                const eventData = JSON.parse(data);
+                fetch('/publish', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ type, data: eventData })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message) {
+                        alert(result.message);
+                        form.reset();
+                    } else if (result.error) {
+                        alert(result.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+            } catch (jsonError) {
+                alert("Invalid JSON data. Please use valid JSON format.")
+            }
+
+        });
+    </script>
+</body>
+</html>
